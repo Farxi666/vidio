@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="影享家 - 登录您的账户" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>影享家 - 登录</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0F0F0F 0%, #1A1A1A 100%);
+            color: #F5F5F1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            color: #E50914;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .logo p {
+            color: #888;
+            margin-top: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CCC;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #FFF;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #E50914;
+            box-shadow: 0 0 20px rgba(229, 9, 20, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #E50914, #FF3A1C);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(229, 9, 20, 0.4);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #888;
+        }
+
+        .register-link a {
+            color: #E50914;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #E50914;
+            text-align: center;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        /* 消息样式 */
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>影享家</h1>
+            <p>发现精彩影视内容</p>
+        </div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="btn-login" id="loginBtn">登录</button>
+            
+            <div class="error-message" id="error-message">
+                用户名或密码错误
+            </div>
+        </form>
+
+        <div class="register-link">
+            还没有账户？<a href="#" onclick="showRegisterForm()">立即注册</a>
+        </div>
+
+        <!-- 消息显示区域 -->
+        <div id="message" style="display: none; padding: 10px; margin-top: 1rem; border-radius: 5px; text-align: center;"></div>
+
+        <!-- 注册表单 (默认隐藏) -->
+        <form id="register-form" style="display: none;">
+            <div class="form-group">
+                <label for="regUsername">用户名</label>
+                <input type="text" id="regUsername" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="regEmail">邮箱</label>
+                <input type="email" id="regEmail" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="regPassword">密码</label>
+                <input type="password" id="regPassword" name="password" required>
+            </div>
+
+            <button type="submit" class="btn-login" id="registerBtn">注册</button>
+            
+            <div class="register-link">
+                已有账户？<a href="#" onclick="switchToLogin()">立即登录</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // 检查是否已经登录
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            window.location.href = 'index.html';
+        }
+
+        // 登录表单提交
+        async function handleLogin(event) {
+          event.preventDefault();
+          
+          const username = document.getElementById('username').value;
+          const password = document.getElementById('password').value;
+          
+          // 显示加载状态
+          const loginBtn = document.getElementById('loginBtn');
+          const originalText = loginBtn.innerHTML;
+          loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 登录中...';
+          loginBtn.disabled = true;
+          
+          try {
+            const response = await fetch('http://localhost:3001/api/login', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ username, password })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+              // 登录成功，保存用户信息
+              localStorage.setItem('isLoggedIn', 'true');
+              localStorage.setItem('username', result.user.username);
+              localStorage.setItem('userId', result.user.id);
+              
+              // 显示成功消息
+              showMessage('登录成功！正在跳转...', 'success');
+              
+              // 延迟跳转
+              setTimeout(() => {
+                window.location.href = 'index.html';
+              }, 1500);
+            } else {
+              // 登录失败
+              showMessage(result.message, 'error');
+              loginBtn.innerHTML = originalText;
+              loginBtn.disabled = false;
+            }
+          } catch (error) {
+            console.error('登录请求错误:', error);
+            showMessage('网络连接错误，请检查服务器是否启动', 'error');
+            loginBtn.innerHTML = originalText;
+            loginBtn.disabled = false;
+          }
+        }
+        
+        // 注册表单提交
+        async function handleRegister(event) {
+          event.preventDefault();
+          
+          const username = document.getElementById('regUsername').value;
+          const password = document.getElementById('regPassword').value;
+          const email = document.getElementById('regEmail').value;
+          
+          // 显示加载状态
+          const registerBtn = document.getElementById('registerBtn');
+          const originalText = registerBtn.innerHTML;
+          registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 注册中...';
+          registerBtn.disabled = true;
+          
+          try {
+            const response = await fetch('http://localhost:3001/api/register', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ username, password, email })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+              // 注册成功
+              showMessage('注册成功！请登录', 'success');
+              
+              // 切换到登录表单
+              switchToLogin();
+            } else {
+              // 注册失败
+              showMessage(result.message, 'error');
+            }
+            
+            registerBtn.innerHTML = originalText;
+            registerBtn.disabled = false;
+          } catch (error) {
+            console.error('注册请求错误:', error);
+            showMessage('网络连接错误，请检查服务器是否启动', 'error');
+            registerBtn.innerHTML = originalText;
+            registerBtn.disabled = false;
+          }
+        }
+        
+        // 显示消息
+        function showMessage(message, type) {
+          const messageDiv = document.getElementById('message');
+          messageDiv.textContent = message;
+          messageDiv.className = `message ${type}`;
+          messageDiv.style.display = 'block';
+          
+          // 自动隐藏
+          if (type === 'success') {
+            setTimeout(() => {
+              messageDiv.style.display = 'none';
+            }, 3000);
+          }
+        }
+        
+        // 检查服务器状态
+        async function checkServerStatus() {
+          try {
+            const response = await fetch('http://localhost:3001/api/health');
+            if (response.ok) {
+              console.log('服务器连接正常');
+            }
+          } catch (error) {
+            console.warn('服务器未启动，请运行: npm run server');
+          }
+        }
+        
+        // 页面加载时检查服务器状态
+        document.addEventListener('DOMContentLoaded', () => {
+          checkServerStatus();
+        });
+        
+        // 显示注册表单
+        function showRegisterForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        }
+        
+        // 切换到登录表单
+        function switchToLogin() {
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
+        
+        // 注册表单提交事件监听
+        document.getElementById('register-form').addEventListener('submit', handleRegister);
+        
+        // 登录表单提交事件监听（更新为使用handleLogin函数）
+        document.getElementById('login-form').addEventListener('submit', handleLogin);
+    </script>
+</body>
+</html>
